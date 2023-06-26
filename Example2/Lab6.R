@@ -1,24 +1,26 @@
 library(tidyverse)
 library(lubridate)
 
+#Checking how the data is organized
 info <- read.csv('Info_Data.csv')
 head(info)
 
+#Creating the dataset to be analyzed
 interpol_data <- read.csv('Interpolated_Data.csv')
-
 lakeGeorge <- filter(interpol_data, lake_id == 131)
 
+#Check max depth
 summary(lakeGeorge$depth) #goes down 33m max
 
 
 
-#Make date correct format
+#Make the date format useable
 lakeGeorge$date <- as.Date(lakeGeorge$date)
 head(lakeGeorge) #1980-06-03 chosen as date
 
 
 
-#surface temp calc
+#surface temp mean calculation for surface temp is depth <= 10m
 lakeGeorgeSurface <- filter(lakeGeorge, depth <= 10)
 
 lakeGeorgeSurfMean <- lakeGeorgeSurface %>% group_by(date) %>% summarise(surfTemp = mean(temp), surf_do_con = mean(do_con))
@@ -47,7 +49,7 @@ lakeGeorgeAnnualTemp <- lakeGeorgeSurfMean_summary %>% group_by(year) %>% summar
 
 summary(lakeGeorgeAnnualTemp$year) #from 1980 - 2013
 
-#Scatter Plot temp
+#Scatter Plot temp over time
 windows()
 ggplot(data = lakeGeorgeAnnualTemp) +
   geom_point(aes(x = year, y = surfTemp), color = "red") +
@@ -57,12 +59,12 @@ ggplot(data = lakeGeorgeAnnualTemp) +
   theme(text = element_text(size = 14), plot.title = element_text(hjust=0.5)) +
   theme_light()
 
-#DO some linear regression
+#Surface Temp linear regression to check trend significance
 st_lm <- lm(lakeGeorgeAnnualTemp$surfTemp ~ lakeGeorgeAnnualTemp$year)
-summary(st_lm)
+summary(st_lm) #slope of m = 0.078, r-squared value of 0.4302, and p-value of 2.051e-5
 
 
-#Scatter Plot and Regression
+#Scatter Plot and Regression for Temp
 windows()
 ggplot(data = lakeGeorgeAnnualTemp) +
   geom_point(aes(x = year, y = surfTemp, color = "Surface <= 10m")) +
@@ -76,11 +78,11 @@ ggplot(data = lakeGeorgeAnnualTemp) +
   scale_colour_manual(name="", values = c("blue","red"))
 
 
-#do plot
+#Dissolved Oxygen plot and regression
 
-#regression
+#DO regression
 sdo_lm <- lm(lakeGeorgeAnnualTemp$surf_do_con ~ lakeGeorgeAnnualTemp$year)
-summary(sdo_lm)
+summary(sdo_lm) #m = -0.013, r squared value of 0.04775, and p-value of 0.01167 not significant for p <= 0.01
 
 windows()
 ggplot(data = lakeGeorgeAnnualTemp) +
