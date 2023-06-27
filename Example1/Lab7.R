@@ -12,21 +12,24 @@ if (any(installed_packages == FALSE)) {
 invisible(lapply(packages, library, character.only = TRUE))
 
 
-
+## Get data from CSV
 groupWorkDF <- read.csv("For Analaysis group 1.csv")
 
 head(groupWorkDF)
 str(groupWorkDF)
 
+# Get mean and standard deviation
 groupAvg <- groupWorkDF %>% group_by(Species, Treatment) %>% 
   summarise(meanGroup = mean(Abs), sdGroup = sd(Abs))
 
+# Deal with bad naming conventions in dataset
 unique(groupAvg$Species)
 groupAvg$Species <- factor(groupAvg$Species, 
                            levels = c('bkg', 'A. hyd', 'B. sub', 'C.fre',
                                       'E.col', 'P.flu', 'S. epi', 'S. mar'))
 
 
+#Make a bar chart of all of the data
 windows()
 ggplot(data = groupAvg, aes(Species, y = meanGroup, fill = Treatment)) +
   geom_bar(stat = "identity", position = "dodge") +
@@ -36,6 +39,8 @@ ggplot(data = groupAvg, aes(Species, y = meanGroup, fill = Treatment)) +
   geom_errorbar(aes(ymin = meanGroup - sdGroup, ymax = meanGroup + sdGroup), position = "dodge") +
   labs(title = "Bacterial Growth after Treatment" , y = "Bacteria Proxy (Abs)")
 
+
+#Analysis of variance
 res.aov2 <- aov(Abs ~ Treatment + Species, data = groupWorkDF)
 summary(res.aov2)
 
