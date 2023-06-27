@@ -13,4 +13,4 @@ Object-oriented programming of various numerical integration methods (in this ca
 Distribution and correlation testing of two different datasets on Sea Level changes and global CO2 emissions over time in R. 
 
 ## Example 5
-Object-oriented programming SNP registry file creator and editor made in Python. 
+Object-oriented programming based SNP registry file creator and editor made in Python. 
