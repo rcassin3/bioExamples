@@ -13,7 +13,7 @@ invisible(lapply(packages, library, character.only = TRUE))
 
 
 
-#|||||||||||||||||||||||||||||||||||||||||||||||||||Importing the Datasets\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#%%%%%%%%%%%%%%%%%Importing the Datasets%%%%%%%%%%%%%%%%%
 
 json_fileCO2 <- 'https://datahub.io/core/co2-fossil-global/datapackage.json'
 json_dataCO2 <- fromJSON(paste(readLines(json_fileCO2), collapse=""))
