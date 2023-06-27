@@ -1,4 +1,16 @@
-library(tidyverse)
+install.packages("jsonlite", repos="https://cran.rstudio.com/")
+# Package names
+packages <- c("tidyverse", "jsonlite", "tcltk", "dplyr", "ggpubr", "psych", "mnormt", "lubridate")
+
+# Install packages not yet installed
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(packages[!installed_packages])
+}
+
+# Packages loading
+invisible(lapply(packages, library, character.only = TRUE))
+
 
 
 groupWorkDF <- read.csv("For Analaysis group 1.csv")
